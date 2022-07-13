@@ -4,13 +4,13 @@ import { Survey } from "../context/survey";
 import { genres } from "../data/genres";
 import { GenreSection } from "./GenreSection";
 import { Validate } from "../context/Validate";
-import axios from "axios";
 import { showSuccess,showError } from "../notifications/Toasts";
 import {ToastContainer} from "react-toastify";
+import surveyServices from "../services/survey";
 export const Form = () => {
   const { info, setinfo } = useContext(Survey);
   const { validate, setvalidate } = useContext(Validate);
-  const [sent, setsent] = useState('notsent')
+  // const [sent, setsent] = useState('notsent')
   const handlesubmit = (event) => {
     event.preventDefault();
     let data = {
@@ -19,11 +19,10 @@ export const Form = () => {
       email: info.email,
       userRatings: info.userRatings,
     };
-    console.log('data : ', data)
+    // console.log('data : ', data)
     // return
 
-    axios
-      .post("http://localhost:4000/survey", data)
+    surveyServices.create(data)
       .then(function (response) {
         if (response.data == "survey saved") {
           //reset form on success
@@ -85,6 +84,14 @@ export const Form = () => {
             type="submit"
             className="h-12 px-4 py-2 font-semibold bg-transparent border rounded w-28 hover:bg-button text-txt hover:text-white border-txt hover:border-transparent hover:cursor-pointer"
           />
+          {/* create button that links to reports page */}
+          <a
+            href="/reports"
+            className="h-12 px-4 py-2 font-semibold bg-transparent border rounded w-28 hover:bg-button text-txt hover:text-white border-txt hover:border-transparent hover:cursor-pointer
+            text-center"
+          >
+            Reports
+          </a>
           {/* {sent == 'sent' ? <p className="mt-5 mb-5 italic text-l ">the survey is sent thank you for your participation :)</p> : sent == 'error' && <p className="mb-10 italic text-red-500 text-l">there was an error sending the form please retry</p>} */}
         </div>
       </form>
